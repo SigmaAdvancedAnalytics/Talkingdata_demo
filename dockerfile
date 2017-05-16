@@ -1,4 +1,4 @@
-FROM debian@sha256:32a225e412babcd54c0ea777846183c61003d125278882873fb2bc97f9057c51
+FROM debian:jessie-slim
 MAINTAINER Joshua Barber "j.barber501@gmail.com"
 
 USER root
@@ -17,12 +17,13 @@ ENV PATH=/$CONDA_DIR/bin:${PATH}
 
 # Miniconda installation
 RUN cd /tmp && \
-	mkdir -p $CONDA_DIR && \
-	wget --quiet http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-	/bin/bash Miniconda3-latest-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
-	rm Miniconda3-latest-Linux-x86_64.sh && \
-	conda update -y conda && \
-	conda clean -tipsy
+    mkdir -p $CONDA_DIR && \
+    wget --quiet https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_64.sh && \
+    /bin/bash Miniconda3-4.2.12-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
+    rm Miniconda3-4.2.12-Linux-x86_64.sh && \
+    $CONDA_DIR/bin/conda config --system --add channels conda-forge && \
+    $CONDA_DIR/bin/conda config --system --set auto_update_conda false && \
+    conda clean -tipsy
 
 # Install yaml to enable the parsing of YAML environment files
 RUN conda install pyyaml
